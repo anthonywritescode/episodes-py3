@@ -1,0 +1,16 @@
+language: python
+python: '3.6'
+install: pip install virtualenv
+script: make
+after_success: make push
+branches:
+    except:
+        - gh-pages
+env:
+    global:
+        # GH_TOKEN
+        - secure: "Ao98mJo32es88M/a26hAaDev3qp2JKP49SJrUdGDRIIRJJItbo6K6jk3V1vvZz2MvC35SwasLx+kzJtU8UO1uP3q+VD7oQg9dng6HBEYXqtHdt+8TsUGwSwf37ynfCv653mqJEFsXchXx4VJh9fqEE8oZKkenoG+0tOH3MsQkhr+tIRI8dVZF0o+voWb+l4Nsa+Mwfv3WhZO01T8b+Q6Dkq+UwIdUF26iohzFJ+JTAsO8Lj6QJZOifGCZDCaZLhi0Ac3a2ZjEONs07ww6tLpHm09xyPUVEvnEO2Nv0nzB+MtreDY4cesIERO5FGHYsnLKtfc0LNappeDGg2jD7fq+A6i1bsD6sevdPxiDa/ZzbsSdgCS5FtH0bFRMDOCt4RNGyZTBgPpE2W+YbCSMmiRF6pUglkQJt+SbVy5ZoIpnfF3HVqq/msP9czixXs45W3yNFep8ZbzxKqbftuGbU/GuJc3vv7cRNtUrr/FLK8pSI/aB4+a3H1offlbvl7MwpehZw71BfqfgLQTFoY5hYhyJ8kuOouTCqodXmYIrgJ70kXghdTWl/vzCM7ZOTmI3Iqtx7cuJZRjkqIntrmEZ9qqp19q7XCZNZsME6dWpDlEYmAPVoI64wll0RiCKgNfu29EdbBmjGhNsmMa0pVvsCabtMQv1NiRDxT91DrY0B2gdx0="
+cache:
+    directories:
+        - "$HOME/.cache/pip"
+        - "$HOME/.pre-commit"
