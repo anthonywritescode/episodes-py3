@@ -40,7 +40,7 @@ except ImportError:
 ```
 
 - backported modules (`python-future`, `configparser`, `enum34`, etc.)
-- hides failure modes
+- hides failure mode
 
 ***
 
