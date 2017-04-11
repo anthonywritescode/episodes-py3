@@ -8,7 +8,89 @@
         <div class="reveal">
             <div class="slides"><section><img src="build/python-logo.png" style="float: left"><h2>python3</h2>
 <h3>conditional execution</h3>
-</section><section><p>hello world</p>
+</section><section><h3>what?</h3>
+<ul>
+<li>2+3 codebase</li>
+<li>sometimes you need to run interpreter-version-specific code</li>
+</ul>
+</section><section><h3>goals</h3>
+<ul>
+<li>little or no runtime overhead</li>
+<li>maintainable</li>
+</ul>
+</section><section><h3>how?</h3>
+<ul>
+<li><strong>before you do anything</strong> check to make sure <code>six</code> doesn't already shim</li>
+<li>make a <code>_compat</code> module for isolation</li>
+</ul>
+</section><section><h3>do not: <code>import</code> detection</h3>
+<div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">ConfigParser</span> <span class="kn">as</span> <span class="nn">configparser</span>
+    <span class="n">PY2</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">configparser</span>
+    <span class="n">PY3</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+<ul>
+<li>backported modules (<code>python-future</code>, <code>configparser</code>, <code>enum34</code>, etc.)</li>
+<li>hides failure modes</li>
+</ul>
+</section><section><h3><em>properly</em> detecting python 2</h3>
+<div class="highlight"><pre><span></span><span class="c1"># Suggested</span>
+<span class="kn">from</span> <span class="nn">six</span> <span class="kn">import</span> <span class="n">PY2</span>
+
+<span class="c1"># Also ok</span>
+<span class="n">PY2</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span>
+
+<span class="c1"># Also works (unless you are using `futurize` stage 2)</span>
+<span class="n">PY2</span> <span class="o">=</span> <span class="nb">str</span> <span class="ow">is</span> <span class="nb">bytes</span>
+</pre></div>
+</section><section><h3>do not: switch on <code>PY3</code></h3>
+<div class="highlight"><pre><span></span><span class="c1"># or `from six import PY3`</span>
+<span class="n">PY3</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+
+<span class="k">if</span> <span class="n">PY3</span><span class="p">:</span>
+    <span class="c1"># ...</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1">#  ...</span>
+</pre></div>
+<ul>
+<li>python 4 <em>is coming</em>!</li>
+<li>treat python 2 as "old" and everything else as "new"</li>
+</ul>
+</section><section><h3>do not: runtime version checks</h3>
+<ul>
+<li>As much as possible isolate version differences to import time</li>
+<li>Make <em>functions</em> and swap implementations based on version</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># do NOT</span>
+<span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
+        <span class="o">...</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="o">...</span>
+<span class="c1"># do</span>
+<span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+        <span class="c1"># python 2 implementation</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+        <span class="c1"># python 3+ implementation</span>
+</pre></div>
+</section><section><h3>full example</h3>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">six</span> <span class="kn">import</span> <span class="n">PY2</span>
+
+<span class="k">def</span> <span class="nf">to_text</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">s</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">)</span> <span class="k">else</span> <span class="n">s</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">to_bytes</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">s</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span> <span class="k">else</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>  <span class="c1"># pragma: no cover (PY2)</span>
+    <span class="n">to_native</span> <span class="o">=</span> <span class="n">to_bytes</span>
+<span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover (PY3+)</span>
+    <span class="n">to_native</span> <span class="o">=</span> <span class="n">to_text</span>
+</pre></div>
 </section></div>
         </div>
         <script src="build/presentation.js"></script>
