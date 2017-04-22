@@ -32,11 +32,11 @@
 
 ```python
 try:
+    import configparser
+    PY2 = False
+except ImportError:
     import ConfigParser as configparser
     PY2 = True
-except ImportError:
-    import configparser
-    PY3 = True
 ```
 
 - backported modules (`python-future`, `configparser`, `enum34`, etc.)
