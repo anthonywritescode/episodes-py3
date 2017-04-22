@@ -25,11 +25,11 @@
 </ul>
 </section><section><h3>do not: <code>import</code> detection</h3>
 <div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">configparser</span>
+    <span class="n">PY2</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">ConfigParser</span> <span class="kn">as</span> <span class="nn">configparser</span>
     <span class="n">PY2</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">configparser</span>
-    <span class="n">PY3</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
 <ul>
 <li>backported modules (<code>python-future</code>, <code>configparser</code>, <code>enum34</code>, etc.)</li>
