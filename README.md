@@ -16,3 +16,7 @@ Episodes in this series:
     - [youtube](https://www.youtube.com/watch?v=AoEx8-UxTVQ)
     - [slides](https://anthonywritescode.github.io/episodes-py3/02-conditional-execution)
     - [slides (markdown)](https://github.com/anthonywritescode/episodes-py3/blob/master/02-conditional-execution/slides.md)
+- Backports #03
+    - [youtube]()
+    - [slides](https://anthonywritescode.github.io/episodes-py3/03-backports)
+    - [slides (markdown)](https://github.com/anthonywritescode/episodes-py3/blob/master/03-backports/slides.md)
