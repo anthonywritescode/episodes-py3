@@ -181,6 +181,11 @@ $ ./venv3/bin/pip install test_pkg-0.0.0-py2.py3-none-any.whl
 Processing ./test_pkg-0.0.0-py2.py3-none-any.whl
 Installing collected packages: test-pkg
 Successfully installed test-pkg-0.0.0
+$ ./venv27/bin/pip install test_pkg-0.0.0-py2.py3-none-any.whl
+Processing ./test_pkg-0.0.0-py2.py3-none-any.whl
+Collecting functools32; python_version == "2.7" (from test-pkg==0.0.0)
+Installing collected packages: functools32, test-pkg
+Successfully installed functools32-3.2.3.post2 test-pkg-0.0.0
 ```
 
 **~\*~success!~\*~**
