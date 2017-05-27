@@ -57,7 +57,7 @@ else:
 ## backports in code
 #### renamed modules
 
-- some examples: `contextlib2`, `functools32`, `mock`, `ordereddict` (for py26)
+- some examples: `contextlib2`, `functools32`, `mock`
 - often existing modules or namespaced modules which cannot be shadowed
 
 ```python
