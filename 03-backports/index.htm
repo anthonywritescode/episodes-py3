@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="build/presentation.css">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides"><section><img src="build/python-logo.png" style="float: left"><h2>python3</h2>
+<h3>backports</h3>
+</section><section><h2>outline</h2>
+<ul>
+<li>what is a backport?</li>
+<li>using backports in code</li>
+<li>conditionally depending on libraries in <code>setup.py</code></li>
+</ul>
+</section><section><h2>what is a backport?</h2>
+<ul>
+<li>new modules, functions, parameters, etc. are added to the standard library
+all the time</li>
+<li>a backport packages up the new features into a pypi package</li>
+<li>this package can be installable in older versions of python</li>
+</ul>
+</section><section><h2>backports in code</h2>
+<h4>whole modules</h4>
+<ul>
+<li>some examples: <code>configparser</code>, <code>enum34</code> (<code>enum</code>), <code>argparse</code> (for py26)</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># The easiest!</span>
+<span class="c1"># just import the new name</span>
+<span class="kn">import</span> <span class="nn">configparser</span>
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+</pre></div>
+</section><section><h2>backports in code</h2>
+<h4>single functions</h4>
+<ul>
+<li>some examples: <code>backports.shutil_get_terminal_size</code>,
+<code>backports.shutil_which</code></li>
+<li>often single function additions to modules in stdlib</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>  <span class="c1"># or sys.version_info &lt; (3, 3) if you need to support python3.2</span>
+    <span class="kn">from</span> <span class="nn">backports.shutil_get_terminal_size</span> <span class="kn">import</span> <span class="n">get_terminal_size</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">get_terminal_size</span>
+</pre></div>
+</section><section><h2>backports in code</h2>
+<h4>renamed modules</h4>
+<ul>
+<li>some examples: <code>contextlib2</code>, <code>functools32</code>, <code>mock</code>, <code>ordereddict</code> (for py26)</li>
+<li>often existing modules or namespaced modules which cannot be shadowed</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">contextlib2</span> <span class="kn">as</span> <span class="nn">contextlib</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">contextlib</span>
+
+<span class="c1"># or</span>
+<span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">contextlib2</span> <span class="kn">import</span> <span class="n">ExitStack</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">ExitStack</span>
+</pre></div>
+</section><section><h2>writing setup.py</h2>
+<ul>
+<li>it's undesirable to install unneeded packages</li>
+<li>as such, many of the backport packages (such as <code>functools32</code>) intentionally
+error when installed in python 3</li>
+<li>as such it's necessary to <em>conditionally</em> require them in setup.py</li>
+</ul>
+</section><section><h2>writing setup.py</h2>
+<ul>
+<li>setup.py is arbitrary python, why not just check the version?</li>
+<li>don't do this (see next slide):</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
+    <span class="n">install_requires</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;functools32&#39;</span><span class="p">]</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">install_requires</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="o">...</span><span class="p">,</span>
+    <span class="n">install_requires</span><span class="o">=</span><span class="n">install_requires</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</section><section><h2>writing setup.py</h2>
+<ul>
+<li><code>wheel</code>s are pre-built installations of packages</li>
+<li>essentially "run <code>setup.py</code>" and <code>zip</code> the result</li>
+<li>Let's see what happens when we build a wheel of the example setup.py</li>
+</ul>
+</section><section><h2>writing setup.py</h2>
+<div class="highlight"><pre><span></span><span class="gp">#</span> Make a wheel with a python <span class="m">2</span> interpreter
+<span class="gp">$</span> ./venv27/bin/pip wheel . --no-deps
+
+<span class="go">...</span>
+
+<span class="gp">#</span> Try and install with a python <span class="m">3</span> interpreter
+<span class="gp">$</span> ./venv3/bin/pip install test_pkg-0.0.0-py2.py3-none-any.whl
+<span class="go">Processing ./test_pkg-0.0.0-py2.py3-none-any.whl</span>
+<span class="go">Collecting functools32 (from test-pkg==0.0.0)</span>
+<span class="go">  Using cached functools32-3.2.3-2.zip</span>
+<span class="go">    Complete output from command python setup.py egg_info:</span>
+<span class="go">    This backport is for Python 2.7 only.</span>
+
+<span class="go">    ----------------------------------------</span>
+<span class="go">Command &quot;python setup.py egg_info&quot; failed with error code 1 in /tmp/pip-build-0bughj6v/functools32/</span>
+</pre></div>
+</section><section><h2>writing setup.py</h2>
+<h4>why did this happen?</h4>
+<ul>
+<li><p><em>problem</em>: the setuptools metadata is written <strong>once</strong>: at build time</p>
+<div class="highlight"><pre><span></span><span class="gp">  $</span> unzip *.whl
+<span class="gp">  $</span> grep ^Requires test_pkg-0.0.0.dist-info/METADATA
+<span class="go">  Requires-Dist: functools32</span>
+</pre></div>
+</li>
+<li><p><em>solution</em>: use <em>environment markers</em></p>
+</li>
+</ul>
+</section><section><h2>writing setup.py</h2>
+<div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
+    <span class="o">...</span>
+    <span class="n">extras_require</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;:python_version==&quot;2.7&quot;&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;functools32&#39;</span><span class="p">],</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+<ul>
+<li><em>note: newer versions of pip support more operators than <code>==</code></em></li>
+<li>See <a href="https://www.python.org/dev/peps/pep-0508/#id23">PEP 508</a> for a full
+list of supported markers.</li>
+<li>Other markers make other conditional dependence easy too (for example,
+<code>pypy</code> specific packages can use <code>:platform_python_implementation=="PyPy"</code></li>
+</ul>
+</section><section><h2>writing setup.py</h2>
+<div class="highlight"><pre><span></span><span class="gp">$</span> ./venv27/bin/pip wheel . --no-deps
+
+<span class="go">...</span>
+
+<span class="gp">$</span> ./venv3/bin/pip install test_pkg-0.0.0-py2.py3-none-any.whl
+<span class="go">Processing ./test_pkg-0.0.0-py2.py3-none-any.whl</span>
+<span class="go">Installing collected packages: test-pkg</span>
+<span class="go">Successfully installed test-pkg-0.0.0</span>
+</pre></div>
+<p><strong>~*~success!~*~</strong></p>
+</section></div>
+        </div>
+        <script src="build/presentation.js"></script>
+        <script>
+            Reveal.initialize({
+                transition: 'linear',
+                keyboard: {39: 'next', 37: 'prev'}
+            });
+        </script>
+    </body>
+</html>
