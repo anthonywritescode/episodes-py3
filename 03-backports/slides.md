@@ -166,7 +166,7 @@ setup(
 - See [PEP 508](https://www.python.org/dev/peps/pep-0508/#id23) for a full
   list of supported markers.
 - Other markers make other conditional dependence easy too (for example,
-  `pypy` specific packages can use `:platform_python_implementation=="PyPy"`
+  `pypy` specific packages can use `:platform_python_implementation=="PyPy"`)
 
 ***
 
