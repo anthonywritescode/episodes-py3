@@ -1,0 +1,265 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="build/presentation.css">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides"><section><img src="build/python-logo.png" style="float: left"><h2>python3</h2>
+<h3>file io</h3>
+</section><section><h2>outline</h2>
+<ul>
+<li>what is meant by <code>text</code> / <code>binary</code> io</li>
+<li>python 2 behavior</li>
+<li>python 3 behavior</li>
+<li>code samples for 2+3 compatibility</li>
+</ul>
+</section><section><h2>what is io?</h2>
+<ul>
+<li>files on disk are a series of 1s and 0s</li>
+<li>for simplicity, we'll think of them as a series of bytes</li>
+<li>we'll also consider stdin and stdout to be special "files"</li>
+</ul>
+</section><section><h2>what is io?</h2>
+<ul>
+<li>for textual data, these bytes have a specific encoding</li>
+<li>a character (codepoint) is represented as a specific series of byte(s)</li>
+</ul>
+<h2>INSERT GRAPHIC ABOUT ENCODING</h2>
+</section><section><h2>what is io?</h2>
+<ul>
+<li>a <strong>binary</strong> io procedure takes in binary data (<code>bytes</code> / <code>bytearray</code>)</li>
+<li>this data is written to the file <em>unmodified</em></li>
+<li>the bytes in your program are represented identically on disk</li>
+</ul>
+</section><section><h2>what is io?</h2>
+<ul>
+<li>a <strong>text</strong> io procedure takes in text data (py2 <code>unicode</code>, py3 <code>str</code>)</li>
+<li>this data is first <em>encoded</em> through an encoding (such as UTF-8)</li>
+<li>then this encoded data is written to the file</li>
+<li>the text in your program is represented by encoded bytes on disk</li>
+</ul>
+</section><section><h2>python 2 - <code>open</code></h2>
+<ul>
+<li>files opened with <code>open</code> will always be in binary mode</li>
+<li>using <code>'wb'</code> or <code>'rb'</code> as the mode is superfluous (but good for documenting
+intent!)</li>
+<li>as with most py2 apis, <code>unicode</code> may be implicitly converted by the
+<code>ASCII</code> codec</li>
+</ul>
+</section><section><h2>python 2 - <code>open</code></h2>
+<div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;hello world!&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;unicode ascii text&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span> <span class="ow">is</span> <span class="nb">bytes</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;☃&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character u&#39;\u2603&#39; in position 0: ordinal not in range(128)</span>
+</pre></div>
+</section><section><h2>python 2 - <code>open</code></h2>
+<ul>
+<li>you <em>can</em> convert these into pseudo-text io objects with the C api</li>
+<li><code>PyFile_SetEncoding</code> / <code>PyFile_SetEncodingAndErrors</code></li>
+<li>let's look at some special streams which do just that!</li>
+</ul>
+</section><section><h2>python 2 - <code>stdout</code> / <code>stderr</code> / <code>print</code></h2>
+<ul>
+<li><code>stdout</code> / <code>stderr</code> are just <code>file</code> objects too</li>
+<li>on interpreter startup, <code>PyFile_SetEncodingAndErrors</code> is called</li>
+<li><strong>but</strong> it is only called when the streams are <code>tty</code>s</li>
+</ul>
+</section><section><h2>python 2 - <code>stdout</code> / <code>stderr</code> / <code>print</code></h2>
+<div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;☃</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">☃</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;☃</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">☃</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;☃&#39;</span><span class="p">)</span>
+<span class="go">☃</span>
+</pre></div>
+</section><section><h2>python 2 - <code>stdout</code> / <code>stderr</code> / <code>print</code></h2>
+<ul>
+<li>writing text is subject to environment variables</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>C python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span>
+<span class="go">Traceback (most recent call last):</span>
+<span class="go">  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;</span>
+<span class="go">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character u&#39;\u2603&#39; in position 0: ordinal not in range(128)</span>
+</pre></div>
+</section><section><h2>python 2 - <code>stdout</code> / <code>stderr</code> / <code>print</code></h2>
+<ul>
+<li>writing text fails if piped (non-tty)</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8 python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span>
+<span class="go">☃</span>
+<span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8 python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span> <span class="p">|</span> cat
+<span class="go">Traceback (most recent call last):</span>
+<span class="go">  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;</span>
+<span class="go">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character u&#39;\u2603&#39; in position 0: ordinal not in range(128)</span>
+</pre></div>
+</section><section><h2>python 2 - <code>stdout</code> / <code>stderr</code> / <code>print</code></h2>
+<ul>
+<li>if environment may vary <em>or</em></li>
+<li>if you might not have a tty<ul>
+<li>the only reliable way to use <code>stdout</code> / <code>stderr</code> / <code>print</code> is with bytes</li>
+</ul>
+</li>
+</ul>
+</section><section><h2>python 2 - <code>cStringIO</code> / <code>StringIO</code></h2>
+<ul>
+<li><code>cStringIO.StringIO</code> - a binary stream (similar to python2 open)</li>
+<li><code>StringIO.StringIO</code><ul>
+<li>allows mixed mode if the <code>ASCII</code> encoding can convert</li>
+<li>produces text if any text inputs</li>
+<li>produces bytes otherwise</li>
+<li>(much slower than <code>cStringIO</code> as it is implemented in pure python)</li>
+</ul>
+</li>
+</ul>
+</section><section><h2>python 2 - <code>cStringIO</code> / <code>StringIO</code></h2>
+<div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xe2\x98\x83</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;hi&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+  File <span class="nb">&quot;/usr/lib/python2.7/StringIO.py&quot;</span>, line <span class="m">271</span>, in <span class="n">getvalue</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">buf</span> <span class="o">+=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buflist</span><span class="p">)</span>
+<span class="gr">UnicodeDecodeError</span>: <span class="n">&#39;ascii&#39; codec can&#39;t decode byte 0xe2 in position 0: ordinal not in range(128)</span>
+</pre></div>
+</section><section><h2>python 3 - <code>open</code></h2>
+<ul>
+<li>just going to look at the <code>io</code> module</li>
+<li><code>open</code> in python3 is just <code>io.open</code></li>
+<li><code>io.open(..., 'rb')</code> or <code>io.open(..., 'wb')</code> produce a binary io object<ul>
+<li>this object <em>requires</em> bytes</li>
+</ul>
+</li>
+<li><code>io.open</code> otherwise returns an <code>io.TextIOWrapper</code><ul>
+<li>this object <em>requires</em> text</li>
+</ul>
+</li>
+</ul>
+</section><section><h2>python 3 - <code>open</code></h2>
+<div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hi&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">2</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">TypeError</span>: <span class="n">a bytes-like object is required, not &#39;str&#39;</span>
+</pre></div>
+</section><section><h2>python 3 - <code>open</code></h2>
+<div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;hi&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">2</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">TypeError</span>: <span class="n">write() argument must be str, not bytes</span>
+</pre></div>
+</section><section><h2>python 3 - <code>open</code></h2>
+<ul>
+<li>The <code>encoding=</code> keyword argument may be passed to change what encoding
+the <code>TextIOWrapper</code> uses to write</li>
+<li>If <code>encoding=</code> is not passed, the encoding is determined using
+<code>locale.getpreferredencoding()</code><ul>
+<li>This <em>usually</em> means looking at the <code>LANG</code> environment variable</li>
+</ul>
+</li>
+</ul>
+</section><section><h2>python 3 - <code>stdout</code> / <code>stderr</code></h2>
+<ul>
+<li><code>stdout</code> / <code>stderr</code> are <code>TextIOWrapper</code>s</li>
+<li>write text using normal methods, write binary via <code>.buffer</code> binary stream</li>
+</ul>
+</section><section><h2>python 3 - <code>print</code></h2>
+<ul>
+<li><code>print</code> in python3 will write as if writing to a text stream</li>
+<li>Will convert by calling <code>str()</code> on arguments if necessary</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+<span class="go">b&#39;foo&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;hi&#39;</span><span class="p">)</span>
+<span class="go">hi</span>
+</pre></div>
+</section><section><h2>python 3 - <code>stdout</code> / <code>stderr</code> / <code>print</code></h2>
+<ul>
+<li>writing text is subject to environment variables</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>C python3 -c <span class="s1">&#39;print(&quot;\u2603&quot;)&#39;</span>
+<span class="go">Traceback (most recent call last):</span>
+<span class="go">  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;</span>
+<span class="go">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character &#39;\u2603&#39; in position 0: ordinal not in range(128)</span>
+</pre></div>
+</section><section><h2>python 3 - stdio <em>gotcha</em></h2>
+<ul>
+<li>io in python 3 is <em>buffered by default</em></li>
+<li>if your output may be piped, be sure to <code>.flush()</code> or
+<code>print(..., flush=True)</code> so it shows immediately</li>
+</ul>
+</section><section><h2>python 3 - string io</h2>
+<ul>
+<li>use <code>io.BytesIO</code> for a binary in memory file-like object<ul>
+<li><em>requires</em> <code>bytes</code></li>
+</ul>
+</li>
+<li>use <code>io.StringIO</code> for a binary in memory file-like object<ul>
+<li><em>requires</em> text</li>
+</ul>
+</li>
+</ul>
+</section><section><h2>py2 + py3</h2>
+<ul>
+<li>\o/ the <code>io</code> module is include in python2.6+</li>
+<li>replace <code>open</code> calls with <code>io.open</code></li>
+<li>replace <code>cStringIO</code> / <code>StringIO</code> with either <code>io.BytesIO</code> or <code>io.StringIO</code></li>
+</ul>
+</section><section><h2>py2 + py3 - writing binary stdio</h2>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
+    <span class="n">stdout_binary</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">stdout_binary</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">buffer</span>
+
+<span class="n">stdout_binary</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xe2\x98\x83\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</section><section><h2>py2 + py3 - writing text stdio</h2>
+<ul>
+<li><code>io.TextIOWrapper</code> does not work with the stdio streams</li>
+<li>use <code>codecs.getwriter</code> instead!</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
+    <span class="n">stdout_text</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getwriter</span><span class="p">(</span><span class="n">locale</span><span class="o">.</span><span class="n">getprefferedencoding</span><span class="p">())(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">stdout_text</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+
+<span class="n">stdout_text</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;☃</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;☃&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">stdout_text</span><span class="p">)</span>
+</pre></div>
+</section><section><h2>py2 + py3 - writing in constrained environment</h2>
+<ul>
+<li>earlier showed that io encoding is subject to <code>LANG</code></li>
+</ul>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
+    <span class="n">stdout_text</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getwriter</span><span class="p">(</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">)(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">stdout_text</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">TextIOWrapper</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">buffer</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span>
+
+<span class="n">stdout_text</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;☃</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;☃&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">stdout_text</span><span class="p">)</span>
+</pre></div>
+</section></div>
+        </div>
+        <script src="build/presentation.js"></script>
+        <script>
+            Reveal.initialize({
+                transition: 'linear',
+                keyboard: {39: 'next', 37: 'prev'}
+            });
+        </script>
+    </body>
+</html>
