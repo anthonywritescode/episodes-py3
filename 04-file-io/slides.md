@@ -271,7 +271,7 @@ UnicodeEncodeError: 'ascii' codec can't encode character '\u2603' in position 0:
 
 ## py2 + py3
 
-- \o/ the `io` module is include in python2.6+
+- \o/ the `io` module is included in python2.6+
 - replace `open` calls with `io.open`
 - replace `cStringIO` / `StringIO` with either `io.BytesIO` or `io.StringIO`
 
