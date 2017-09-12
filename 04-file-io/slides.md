@@ -264,7 +264,7 @@ UnicodeEncodeError: 'ascii' codec can't encode character '\u2603' in position 0:
 
 - use `io.BytesIO` for a binary in memory file-like object
     - *requires* `bytes`
-- use `io.StringIO` for a binary in memory file-like object
+- use `io.StringIO` for a text in memory file-like object
     - *requires* text
 
 ***
