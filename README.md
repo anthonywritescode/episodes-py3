@@ -20,3 +20,7 @@ Episodes in this series:
     - [youtube](https://www.youtube.com/watch?v=rS2ZgWedTUs)
     - [slides](https://anthonywritescode.github.io/episodes-py3/03-backports)
     - [slides (markdown)](https://github.com/anthonywritescode/episodes-py3/blob/master/03-backports/slides.md)
+- File IO #04
+    - [youtube](https://www.youtube.com/watch?v=cIaOisyd7lE)
+    - [slides](https://anthonywritescode.github.io/episodes-py3/04-file-io)
+    - [slides (markdown)](https://github.com/anthonywritescode/episodes-py3/blob/master/04-file-io/slides.md)
