@@ -49,7 +49,7 @@ intent!)</li>
 <code>ASCII</code> codec</li>
 </ul>
 </section><section><h2>python 2 - <code>open</code></h2>
-<div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;hello world!&#39;</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;unicode ascii text&#39;</span><span class="p">)</span>
 <span class="gp">...</span>
@@ -75,7 +75,7 @@ intent!)</li>
 <li><strong>but</strong> it is only called when the streams are <code>tty</code>s</li>
 </ul>
 </section><section><h2>python 2 - <code>stdout</code> / <code>stderr</code> / <code>print</code></h2>
-<div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;☃</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="go">☃</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;☃</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -87,7 +87,7 @@ intent!)</li>
 <ul>
 <li>writing text is subject to environment variables</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>C python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span>
+<div class="highlight console"><pre><span></span><span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>C python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span>
 <span class="go">Traceback (most recent call last):</span>
 <span class="go">  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;</span>
 <span class="go">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character u&#39;\u2603&#39; in position 0: ordinal not in range(128)</span>
@@ -96,7 +96,7 @@ intent!)</li>
 <ul>
 <li>writing text fails if piped (non-tty)</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8 python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span>
+<div class="highlight console"><pre><span></span><span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8 python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span>
 <span class="go">☃</span>
 <span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8 python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span> <span class="p">|</span> cat
 <span class="go">Traceback (most recent call last):</span>
@@ -123,7 +123,7 @@ intent!)</li>
 </li>
 </ul>
 </section><section><h2>python 2 - <code>cStringIO</code> / <code>StringIO</code></h2>
-<div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xe2\x98\x83</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;hi&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
@@ -147,7 +147,7 @@ intent!)</li>
 </li>
 </ul>
 </section><section><h2>python 3 - <code>open</code></h2>
-<div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hi&#39;</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gt">Traceback (most recent call last):</span>
@@ -155,7 +155,7 @@ intent!)</li>
 <span class="gr">TypeError</span>: <span class="n">a bytes-like object is required, not &#39;str&#39;</span>
 </pre></div>
 </section><section><h2>python 3 - <code>open</code></h2>
-<div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;hi&#39;</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gt">Traceback (most recent call last):</span>
@@ -182,7 +182,7 @@ the <code>TextIOWrapper</code> uses to write</li>
 <li><code>print</code> in python3 will write as if writing to a text stream</li>
 <li>Will convert by calling <code>str()</code> on arguments if necessary</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
 <span class="go">b&#39;foo&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;hi&#39;</span><span class="p">)</span>
 <span class="go">hi</span>
@@ -191,7 +191,7 @@ the <code>TextIOWrapper</code> uses to write</li>
 <ul>
 <li>writing text is subject to environment variables</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>C python3 -c <span class="s1">&#39;print(&quot;\u2603&quot;)&#39;</span>
+<div class="highlight console"><pre><span></span><span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>C python3 -c <span class="s1">&#39;print(&quot;\u2603&quot;)&#39;</span>
 <span class="go">Traceback (most recent call last):</span>
 <span class="go">  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;</span>
 <span class="go">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character &#39;\u2603&#39; in position 0: ordinal not in range(128)</span>
@@ -220,7 +220,7 @@ the <code>TextIOWrapper</code> uses to write</li>
 <li>replace <code>cStringIO</code> / <code>StringIO</code> with either <code>io.BytesIO</code> or <code>io.StringIO</code></li>
 </ul>
 </section><section><h2>py2 + py3 - writing binary stdio</h2>
-<div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
+<div class="highlight python"><pre><span></span><span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
     <span class="n">stdout_binary</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">stdout_binary</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">buffer</span>
@@ -232,7 +232,7 @@ the <code>TextIOWrapper</code> uses to write</li>
 <li><code>io.TextIOWrapper</code> does not work with the stdio streams</li>
 <li>use <code>codecs.getwriter</code> instead!</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
+<div class="highlight python"><pre><span></span><span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
     <span class="n">stdout_text</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getwriter</span><span class="p">(</span><span class="n">locale</span><span class="o">.</span><span class="n">getprefferedencoding</span><span class="p">())(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">stdout_text</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
@@ -244,7 +244,7 @@ the <code>TextIOWrapper</code> uses to write</li>
 <ul>
 <li>earlier showed that io encoding is subject to <code>LANG</code></li>
 </ul>
-<div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
+<div class="highlight python"><pre><span></span><span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
     <span class="n">stdout_text</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getwriter</span><span class="p">(</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">)(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">stdout_text</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">TextIOWrapper</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">buffer</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span>
