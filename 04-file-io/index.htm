@@ -54,7 +54,7 @@ intent!)</li>
 <span class="gp">... </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;unicode ascii text&#39;</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span> <span class="ow">is</span> <span class="nb">bytes</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span> <span class="ow">is</span> <span class="nb">bytes</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;f.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -80,7 +80,7 @@ intent!)</li>
 <span class="go">☃</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;☃</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="go">☃</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;☃&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;☃&#39;</span><span class="p">)</span>
 <span class="go">☃</span>
 </pre></div>
 </section><section><h2>python 2 - <code>stdout</code> / <code>stderr</code> / <code>print</code></h2>
@@ -182,9 +182,9 @@ the <code>TextIOWrapper</code> uses to write</li>
 <li><code>print</code> in python3 will write as if writing to a text stream</li>
 <li>Will convert by calling <code>str()</code> on arguments if necessary</li>
 </ul>
-<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
 <span class="go">b&#39;foo&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;hi&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hi&#39;</span><span class="p">)</span>
 <span class="go">hi</span>
 </pre></div>
 </section><section><h2>python 3 - <code>stdout</code> / <code>stderr</code> / <code>print</code></h2>
@@ -238,7 +238,7 @@ the <code>TextIOWrapper</code> uses to write</li>
     <span class="n">stdout_text</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
 
 <span class="n">stdout_text</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;☃</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;☃&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">stdout_text</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;☃&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stdout_text</span><span class="p">)</span>
 </pre></div>
 </section><section><h2>py2 + py3 - writing in constrained environment</h2>
 <ul>
@@ -250,7 +250,7 @@ the <code>TextIOWrapper</code> uses to write</li>
     <span class="n">stdout_text</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">TextIOWrapper</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">buffer</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span>
 
 <span class="n">stdout_text</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;☃</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;☃&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">stdout_text</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;☃&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stdout_text</span><span class="p">)</span>
 </pre></div>
 </section></div>
         </div>
