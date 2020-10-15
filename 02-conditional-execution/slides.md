@@ -91,15 +91,13 @@ def foo():
 # do
 if PY2:
     def foo():
-        # python 2 implementation
+        # python 2,3 implementation
 else:
     def foo():
         # python 3+ implementation
 ```
 
 ***
-
-
 ### full example
 
 ```python
