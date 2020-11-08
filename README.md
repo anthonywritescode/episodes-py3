@@ -1,3 +1,5 @@
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/anthonywritescode/episodes-py3/master.svg)](https://results.pre-commit.ci/latest/github/anthonywritescode/episodes-py3/master)
+
 episodes-py3
 ============
 
