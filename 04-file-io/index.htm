@@ -88,7 +88,7 @@ intent!)</li>
 <ul>
 <li>writing text is subject to environment variables</li>
 </ul>
-<div class="highlight console"><pre><span></span><span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>C python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span>
+<div class="highlight console"><pre><span></span><span class="gp">$ </span><span class="nv">LANG</span><span class="o">=</span>C python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span>
 <span class="go">Traceback (most recent call last):</span>
 <span class="go">  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;</span>
 <span class="go">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character u&#39;\u2603&#39; in position 0: ordinal not in range(128)</span>
@@ -97,9 +97,9 @@ intent!)</li>
 <ul>
 <li>writing text fails if piped (non-tty)</li>
 </ul>
-<div class="highlight console"><pre><span></span><span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8 python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span>
+<div class="highlight console"><pre><span></span><span class="gp">$ </span><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8 python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span>
 <span class="go">☃</span>
-<span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8 python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span> <span class="p">|</span> cat
+<span class="gp">$ </span><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8 python -c <span class="s1">&#39;print(u&quot;\u2603&quot;)&#39;</span> <span class="p">|</span> cat
 <span class="go">Traceback (most recent call last):</span>
 <span class="go">  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;</span>
 <span class="go">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character u&#39;\u2603&#39; in position 0: ordinal not in range(128)</span>
@@ -192,7 +192,7 @@ the <code>TextIOWrapper</code> uses to write</li>
 <ul>
 <li>writing text is subject to environment variables</li>
 </ul>
-<div class="highlight console"><pre><span></span><span class="gp">$</span> <span class="nv">LANG</span><span class="o">=</span>C python3 -c <span class="s1">&#39;print(&quot;\u2603&quot;)&#39;</span>
+<div class="highlight console"><pre><span></span><span class="gp">$ </span><span class="nv">LANG</span><span class="o">=</span>C python3 -c <span class="s1">&#39;print(&quot;\u2603&quot;)&#39;</span>
 <span class="go">Traceback (most recent call last):</span>
 <span class="go">  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;</span>
 <span class="go">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character &#39;\u2603&#39; in position 0: ordinal not in range(128)</span>

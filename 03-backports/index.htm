@@ -95,13 +95,13 @@ error when installed in python 3</li>
 <li>Let's see what happens when we build a wheel of the example setup.py</li>
 </ul>
 </section><section><h2>writing setup.py</h2>
-<div class="highlight console"><pre><span></span><span class="gp">#</span> Make a wheel with a python <span class="m">2</span> interpreter
-<span class="gp">$</span> ./venv27/bin/pip wheel . --no-deps
+<div class="highlight console"><pre><span></span><span class="gp"># </span>Make a wheel with a python <span class="m">2</span> interpreter
+<span class="gp">$ </span>./venv27/bin/pip wheel . --no-deps
 
 <span class="go">...</span>
 
-<span class="gp">#</span> Try and install with a python <span class="m">3</span> interpreter
-<span class="gp">$</span> ./venv3/bin/pip install test_pkg-0.0.0-py2.py3-none-any.whl
+<span class="gp"># </span>Try and install with a python <span class="m">3</span> interpreter
+<span class="gp">$ </span>./venv3/bin/pip install test_pkg-0.0.0-py2.py3-none-any.whl
 <span class="go">Processing ./test_pkg-0.0.0-py2.py3-none-any.whl</span>
 <span class="go">Collecting functools32 (from test-pkg==0.0.0)</span>
 <span class="go">  Using cached functools32-3.2.3-2.zip</span>
@@ -115,8 +115,8 @@ error when installed in python 3</li>
 <h4>why did this happen?</h4>
 <ul>
 <li><p><em>problem</em>: the setuptools metadata is written <strong>once</strong>: at build time</p>
-<div class="highlight console"><pre><span></span><span class="gp">$</span> unzip *.whl
-<span class="gp">$</span> grep ^Requires test_pkg-0.0.0.dist-info/METADATA
+<div class="highlight console"><pre><span></span><span class="gp">$ </span>unzip *.whl
+<span class="gp">$ </span>grep ^Requires test_pkg-0.0.0.dist-info/METADATA
 <span class="go">Requires-Dist: functools32</span>
 </pre></div>
 </li>
@@ -139,15 +139,15 @@ list of supported markers.</li>
 <code>pypy</code> specific packages can use <code>:platform_python_implementation==&quot;PyPy&quot;</code>)</li>
 </ul>
 </section><section><h2>writing setup.py</h2>
-<div class="highlight console"><pre><span></span><span class="gp">$</span> ./venv27/bin/pip wheel . --no-deps
+<div class="highlight console"><pre><span></span><span class="gp">$ </span>./venv27/bin/pip wheel . --no-deps
 
 <span class="go">...</span>
 
-<span class="gp">$</span> ./venv3/bin/pip install test_pkg-0.0.0-py2.py3-none-any.whl
+<span class="gp">$ </span>./venv3/bin/pip install test_pkg-0.0.0-py2.py3-none-any.whl
 <span class="go">Processing ./test_pkg-0.0.0-py2.py3-none-any.whl</span>
 <span class="go">Installing collected packages: test-pkg</span>
 <span class="go">Successfully installed test-pkg-0.0.0</span>
-<span class="gp">$</span> ./venv27/bin/pip install test_pkg-0.0.0-py2.py3-none-any.whl
+<span class="gp">$ </span>./venv27/bin/pip install test_pkg-0.0.0-py2.py3-none-any.whl
 <span class="go">Processing ./test_pkg-0.0.0-py2.py3-none-any.whl</span>
 <span class="go">Collecting functools32; python_version == &quot;2.7&quot; (from test-pkg==0.0.0)</span>
 <span class="go">Installing collected packages: functools32, test-pkg</span>
