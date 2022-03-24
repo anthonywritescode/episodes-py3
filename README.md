@@ -1,4 +1,4 @@
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/anthonywritescode/episodes-py3/master.svg)](https://results.pre-commit.ci/latest/github/anthonywritescode/episodes-py3/master)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/anthonywritescode/episodes-py3/main.svg)](https://results.pre-commit.ci/latest/github/anthonywritescode/episodes-py3/main)
 
 episodes-py3
 ============
@@ -13,16 +13,16 @@ Episodes in this series:
 - An Introduction to Porting #01
     - [youtube](https://www.youtube.com/watch?v=eO4V5JaCiR4)
     - [slides](https://anthonywritescode.github.io/py3-preso/#/)
-    - [slides (markdown)](https://github.com/anthonywritescode/py3-preso/blob/master/slides.md)
+    - [slides (markdown)](https://github.com/anthonywritescode/py3-preso/blob/main/slides.md)
 - Conditional Execution #02
     - [youtube](https://www.youtube.com/watch?v=AoEx8-UxTVQ)
     - [slides](https://anthonywritescode.github.io/episodes-py3/02-conditional-execution)
-    - [slides (markdown)](https://github.com/anthonywritescode/episodes-py3/blob/master/02-conditional-execution/slides.md)
+    - [slides (markdown)](https://github.com/anthonywritescode/episodes-py3/blob/main/02-conditional-execution/slides.md)
 - Backports #03
     - [youtube](https://www.youtube.com/watch?v=rS2ZgWedTUs)
     - [slides](https://anthonywritescode.github.io/episodes-py3/03-backports)
-    - [slides (markdown)](https://github.com/anthonywritescode/episodes-py3/blob/master/03-backports/slides.md)
+    - [slides (markdown)](https://github.com/anthonywritescode/episodes-py3/blob/main/03-backports/slides.md)
 - File IO #04
     - [youtube](https://www.youtube.com/watch?v=cIaOisyd7lE)
     - [slides](https://anthonywritescode.github.io/episodes-py3/04-file-io)
-    - [slides (markdown)](https://github.com/anthonywritescode/episodes-py3/blob/master/04-file-io/slides.md)
+    - [slides (markdown)](https://github.com/anthonywritescode/episodes-py3/blob/main/04-file-io/slides.md)
