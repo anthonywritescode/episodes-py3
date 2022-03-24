@@ -28,7 +28,7 @@
 - for textual data, these bytes have a specific encoding
 - a character (codepoint) is represented as a specific series of byte(s)
 
-![encoding graphic](https://github.com/anthonywritescode/episodes-py3/raw/master/assets/encoding.png)
+![encoding graphic](https://github.com/anthonywritescode/episodes-py3/raw/main/assets/encoding.png)
 
 ***
 
